@@ -1,0 +1,29 @@
+[package]
+name = "fallback-lint"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+description = "Audit ordered backend fallback ladders for policy drift and outage dead ends"
+license = "MIT"
+repository = "https://github.com/nicholas-ruest/fallback-lint"
+keywords = ["failover", "policy", "reliability", "cli"]
+categories = ["command-line-utilities", "development-tools"]
+
+[dependencies]
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive"] }
+hex = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10"
+toml = "0.9"
+
+[dev-dependencies]
+assert_cmd = "2.0"
+predicates = "3.1"
+tempfile = "3.23"
+
+[profile.release]
+strip = true
+lto = "thin"
+codegen-units = 1

@@ -1,0 +1,39 @@
+schema_version = 1
+
+[settings]
+generate_single_provider_outages = true
+generate_single_region_outages = false
+max_routes_per_workload = 4
+
+[[targets]]
+id = "safe-local"
+provider = "local"
+region = "ca-central"
+external = false
+quality_bps = 9300
+cost_microunits = 15
+p95_latency_ms = 90
+capabilities = ["json"]
+data_classes = ["restricted"]
+
+[[targets]]
+id = "unsafe-external"
+provider = "external"
+region = "us-east"
+external = true
+quality_bps = 8800
+cost_microunits = 40
+p95_latency_ms = 160
+capabilities = ["json"]
+data_classes = ["internal"]
+
+[[workloads]]
+id = "restricted-summary"
+data_class = "restricted"
+allowed_regions = ["ca-central"]
+allow_external = false
+min_quality_bps = 9000
+max_cost_microunits = 20
+max_p95_latency_ms = 120
+required_capabilities = ["json"]
+routes = ["safe-local", "unsafe-external"]

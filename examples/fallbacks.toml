@@ -1,0 +1,61 @@
+schema_version = 1
+
+[settings]
+generate_single_provider_outages = true
+generate_single_region_outages = true
+max_routes_per_workload = 6
+
+[[targets]]
+id = "toronto-local"
+provider = "local-fleet"
+region = "ca-central"
+external = false
+quality_bps = 9400
+cost_microunits = 18
+p95_latency_ms = 110
+capabilities = ["json", "tools"]
+data_classes = ["internal", "restricted"]
+
+[[targets]]
+id = "montreal-local"
+provider = "backup-fleet"
+region = "ca-east"
+external = false
+quality_bps = 9250
+cost_microunits = 20
+p95_latency_ms = 135
+capabilities = ["json", "tools"]
+data_classes = ["internal", "restricted"]
+
+[[targets]]
+id = "external-fast"
+provider = "external-cloud"
+region = "ca-central"
+external = true
+quality_bps = 9600
+cost_microunits = 28
+p95_latency_ms = 90
+capabilities = ["json", "tools"]
+data_classes = ["internal"]
+
+[[workloads]]
+id = "restricted-support"
+data_class = "restricted"
+allowed_regions = ["ca-central", "ca-east"]
+allow_external = false
+min_quality_bps = 9000
+max_cost_microunits = 25
+max_p95_latency_ms = 150
+required_capabilities = ["json", "tools"]
+routes = ["toronto-local", "montreal-local"]
+
+[[workloads]]
+id = "internal-summary"
+data_class = "internal"
+allowed_regions = ["ca-central", "ca-east"]
+allow_external = true
+min_quality_bps = 9000
+max_cost_microunits = 30
+max_p95_latency_ms = 150
+required_capabilities = ["json"]
+routes = ["toronto-local", "montreal-local", "external-fast"]
